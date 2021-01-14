@@ -186,12 +186,14 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
                     exit_flag = True
                     break
                 continue_flag = extra_turn(score1, score0)
+            say = say(score0, score1)
         who = other(who)
-    # END PROBLEM 5
-    # (note that the indentation for the problem 6 prompt (***YOUR CODE HERE***) might be misleading)
-    # BEGIN PROBLEM 6
-    "*** YOUR CODE HERE ***"
-    # END PROBLEM 6
+        # END PROBLEM 5
+        # (note that the indentation for the problem 6 prompt (***YOUR CODE HERE***) might be misleading)
+        # BEGIN PROBLEM 6
+        "*** YOUR CODE HERE ***"
+        # END PROBLEM 6
+    say = say(score0, score1)
     return score0, score1
 
 
@@ -279,6 +281,15 @@ def announce_highest(who, last_score=0, running_high=0):
     assert who == 0 or who == 1, 'The who argument should indicate a player.'
     # BEGIN PROBLEM 7
     "*** YOUR CODE HERE ***"
+
+    def print_highest(s0, s1):
+        score = [s0, s1]
+        gain = score[who] - last_score
+        if gain > running_high:
+            print("%d point(s)! The most yet for Player %d" % (gain, who))
+        return announce_highest(who, last_score=score[who], running_high=max(gain, running_high))
+
+    return print_highest
     # END PROBLEM 7
 
 
