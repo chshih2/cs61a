@@ -332,6 +332,15 @@ def make_averaged(original_function, trials_count=1000):
     """
     # BEGIN PROBLEM 8
     "*** YOUR CODE HERE ***"
+
+    def average_over_trials(*args):
+        total = 0
+        for _ in range(trials_count):
+            total += original_function(*args)
+        total /= trials_count
+        return total
+
+    return average_over_trials
     # END PROBLEM 8
 
 
@@ -346,6 +355,15 @@ def max_scoring_num_rolls(dice=six_sided, trials_count=1000):
     """
     # BEGIN PROBLEM 9
     "*** YOUR CODE HERE ***"
+    record_average = []
+    for num_rolls in range(1, 11):
+        averaged_dice = make_averaged(roll_dice, trials_count)
+        average = averaged_dice(num_rolls, dice)
+        record_average.append(average)
+    for i in range(10):
+        if abs(record_average[i] - max(record_average)) < 1e-5:
+            return i + 1
+
     # END PROBLEM 9
 
 
@@ -394,7 +412,7 @@ def piggypoints_strategy(score, opponent_score, cutoff=8, num_rolls=6):
     rolls NUM_ROLLS otherwise.
     """
     # BEGIN PROBLEM 10
-    return 6  # Replace this statement
+    return 0 if piggy_points(opponent_score) >= cutoff else num_rolls  # Replace this statement
     # END PROBLEM 10
 
 
@@ -404,17 +422,20 @@ def extra_turn_strategy(score, opponent_score, cutoff=8, num_rolls=6):
     Otherwise, it rolls NUM_ROLLS.
     """
     # BEGIN PROBLEM 11
-    return 6  # Replace this statement
+    roll_0_condition = extra_turn(score + piggy_points(opponent_score), opponent_score) \
+                       or piggypoints_strategy(score, opponent_score, cutoff, num_rolls) == 0
+
+    return 0 if roll_0_condition else num_rolls  # Replace this statement
     # END PROBLEM 11
 
 
 def final_strategy(score, opponent_score):
     """Write a brief description of your final strategy.
-
+    always roll 10
     *** YOUR DESCRIPTION HERE ***
     """
     # BEGIN PROBLEM 12
-    return 6  # Replace this statement
+    return 10  # Replace this statement
     # END PROBLEM 12
 
 
