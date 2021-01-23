@@ -162,10 +162,14 @@ def pawssible_patches(start, goal, limit):
             return min([add_diff, remove_diff, substitute_diff])
 
 
-
 def final_diff(start, goal, limit):
     """A diff function. If you implement this function, it will be used."""
-    assert False, 'Remove this line to use your final_diff function'
+    # assert False, 'Remove this line to use your final_diff function'
+    distances = get_key_distances()
+    total_dist = 0
+    for i in min(len(start), len(goal)):
+        total_dist += distances[start[i], goal[i]]
+    return total_dist + abs(len(start) - len(goal))
 
 
 ###########
@@ -177,6 +181,13 @@ def report_progress(typed, prompt, user_id, send):
     """Send a report of your id and progress so far to the multiplayer server."""
     # BEGIN PROBLEM 8
     "*** YOUR CODE HERE ***"
+    for i in range(len(typed)):
+        if typed[i] != prompt[i]:
+            i -= 1
+            break
+    progress = (i + 1) / len(prompt) if len(typed) > 0 else 0.0
+    send({'id': user_id, 'progress': progress})
+    return progress
     # END PROBLEM 8
 
 
@@ -203,6 +214,12 @@ def time_per_word(times_per_player, words):
     """
     # BEGIN PROBLEM 9
     "*** YOUR CODE HERE ***"
+    time_difference = []
+    for accumulate_time in times_per_player:
+        time_difference.append([i - j for i, j in zip(accumulate_time[1:], accumulate_time[:-1])])
+    word_typed = [words[i] for i in range(len(accumulate_time[:-1]))]
+
+    return game(word_typed, time_difference)
     # END PROBLEM 9
 
 
@@ -218,6 +235,16 @@ def fastest_words(game):
     word_indices = range(len(all_words(game)))  # contains an *index* for each word
     # BEGIN PROBLEM 10
     "*** YOUR CODE HERE ***"
+    times = all_times(game)
+    words = all_words(game)
+    word_lists = []
+    for _ in player_indices:
+        word_lists.append([])
+    for i in word_indices:
+        time_for_word = [times[j][i] for j in player_indices]
+        win_player = time_for_word.index(min(time_for_word))
+        word_lists[win_player].append(words[i])
+    return word_lists
     # END PROBLEM 10
 
 
